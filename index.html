@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanmay K — Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #050505;
+            --bg-card: #0c0c0c;
+            --bg-card2: #111111;
+            --green: #00ff88;
+            --cyan: #00d4ff;
+            --text: #e8e8e8;
+            --text-muted: #666;
+            --border: #1e1e1e;
+            --font-display: 'Orbitron', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+            --font-body: 'Sora', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 2px; }
+        ::selection { background: rgba(0,255,136,0.2); color: var(--green); }
+
+        /* ── NAVBAR ─────────────────────────────── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(5,5,5,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2.5rem;
+            height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1rem; color: var(--green);
+            text-decoration: none; letter-spacing: 2px;
+        }
+        .nav-logo span { color: var(--text); }
+
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            font-family: var(--font-code); font-size: 0.75rem;
+            color: var(--text-muted); text-decoration: none;
+            transition: color 0.2s; letter-spacing: 1px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--green); }
+
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+        .hamburger span { display: block; width: 24px; height: 2px; background: var(--green); transition: all 0.3s; }
+
+        /* ── HERO ───────────────────────────────── */
+        #home {
+            min-height: 100vh;
+            display: flex; align-items: center;
+            position: relative; overflow: hidden;
+            padding: 80px 2.5rem 0;
+        }
+
+        #matrix-canvas {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.07; pointer-events: none;
+        }
+
+        .scanlines {
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 2px,
+                rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
+            );
+            pointer-events: none; z-index: 1;
+        }
+
+        .hero-content {
+            position: relative; z-index: 2;
+            max-width: 1200px; margin: 0 auto; width: 100%;
+            display: grid; grid-template-columns: 1fr auto;
+            gap: 4rem; align-items: center;
+        }
+
+        .hero-label {
+            font-family: var(--font-code); font-size: 0.72rem;
+            color: var(--green); letter-spacing: 4px; margin-bottom: 1rem;
+            opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+        }
+
+        .hero-name {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900; letter-spacing: 3px;
+            line-height: 1.1; margin-bottom: 0.5rem;
+            opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards;
+        }
+
+        .glitch {
+            position: relative; color: #fff; display: inline-block;
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+        .glitch::before {
+            color: var(--cyan); animation: glitch1 5s infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+        }
+        .glitch::after {
+            color: var(--green); animation: glitch2 5s infinite;
+            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+        }
+
+        @keyframes glitch1 {
+            0%,92%,97%,100% { transform: translateX(0); opacity: 0; }
+            94%             { transform: translateX(-4px); opacity: 1; }
+        }
+        @keyframes glitch2 {
+            0%,92%,97%,100% { transform: translateX(0); opacity: 0; }
+            94%             { transform: translateX(4px); opacity: 1; }
+        }
+
+        .hero-typing {
+            font-family: var(--font-code); font-size: 1.1rem;
+            color: var(--green); margin-bottom: 1.5rem; min-height: 1.7rem;
+            opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards;
+        }
+
+        .cursor {
+            display: inline-block; width: 2px; height: 1.1em;
+            background: var(--green); margin-left: 2px;
+            vertical-align: text-bottom; animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .hero-desc {
+            font-size: 1rem; color: var(--text-muted);
+            max-width: 520px; margin-bottom: 2.5rem;
+            opacity: 0; animation: fadeUp 0.6s ease 0.8s forwards;
+        }
+
+        .hero-btns {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+            opacity: 0; animation: fadeUp 0.6s ease 1s forwards;
+        }
+
+        .btn-primary {
+            font-family: var(--font-code); font-size: 0.82rem;
+            padding: 0.8rem 1.8rem; background: var(--green); color: #000;
+            border: none; cursor: pointer; text-decoration: none;
+            letter-spacing: 1.5px; font-weight: 700;
+            transition: all 0.2s;
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+        }
+        .btn-primary:hover { background: #fff; transform: translateY(-2px); }
+
+        .btn-secondary {
+            font-family: var(--font-code); font-size: 0.82rem;
+            padding: 0.8rem 1.8rem; background: transparent;
+            color: var(--green); border: 1px solid var(--green);
+            cursor: pointer; text-decoration: none; letter-spacing: 1.5px;
+            transition: all 0.2s;
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+        }
+        .btn-secondary:hover { background: rgba(0,255,136,0.08); transform: translateY(-2px); }
+
+        .hero-image-wrap {
+            position: relative;
+            opacity: 0; animation: fadeIn 1s ease 0.5s forwards;
+        }
+
+        .hero-img {
+            width: 280px; height: 280px; object-fit: cover;
+            border: 2px solid var(--green); display: block;
+            clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
+        }
+
+        .hero-img-border {
+            position: absolute; top: 10px; left: 10px; right: -10px; bottom: -10px;
+            border: 1px solid rgba(0,255,136,0.25);
+            clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
+            pointer-events: none;
+        }
+
+        .status-badge {
+            position: absolute; bottom: 16px; right: -24px;
+            background: var(--bg-card2); border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            font-family: var(--font-code); font-size: 0.68rem;
+            color: var(--green); display: flex; align-items: center; gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px; background: var(--green);
+            border-radius: 50%; animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        /* ── SECTIONS ───────────────────────────── */
+        section { padding: 6rem 2.5rem; }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .section-header { margin-bottom: 3rem; }
+
+        .section-label {
+            font-family: var(--font-code); font-size: 0.7rem;
+            color: var(--green); letter-spacing: 4px;
+            margin-bottom: 0.5rem; display: block;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 2.8vw, 2rem);
+            font-weight: 700; letter-spacing: 2px;
+            position: relative; display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute; bottom: -8px; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--green), transparent);
+        }
+
+        /* ── ABOUT ──────────────────────────────── */
+        #about { background: var(--bg); }
+
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 2.5rem; align-items: start;
+        }
+
+        .terminal-card {
+            background: var(--bg-card); border: 1px solid var(--border); overflow: hidden;
+        }
+
+        .terminal-header {
+            background: var(--bg-card2); padding: 0.6rem 1rem;
+            display: flex; align-items: center; gap: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .dot-red    { background: #ff5f57; }
+        .dot-yellow { background: #febc2e; }
+        .dot-green  { background: #28c840; }
+
+        .terminal-title {
+            font-family: var(--font-code); font-size: 0.68rem;
+            color: var(--text-muted); margin-left: 8px; letter-spacing: 1px;
+        }
+
+        .terminal-body {
+            padding: 1.5rem; font-family: var(--font-code);
+            font-size: 0.82rem; line-height: 1.9;
+        }
+
+        .cmd  { color: var(--green); }
+        .output { color: #999; padding-left: 1rem; margin-bottom: 0.5rem; }
+        .key  { color: var(--cyan); }
+        .val  { color: #e8e8e8; }
+
+        .skills-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 0.5rem; margin-top: 0.5rem;
+        }
+
+        .skill-item {
+            padding: 0.45rem 0.75rem;
+            background: rgba(0,255,136,0.05);
+            border: 1px solid rgba(0,255,136,0.1);
+            font-family: var(--font-code); font-size: 0.72rem;
+            color: var(--text); display: flex; align-items: center; gap: 6px;
+        }
+        .skill-item::before { content: '>'; color: var(--green); font-weight: 700; }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 1px; background: var(--border);
+        }
+        .stat-box { background: var(--bg-card); padding: 1.5rem; text-align: center; }
+        .stat-number {
+            font-family: var(--font-display); font-size: 1.9rem;
+            font-weight: 900; color: var(--green); display: block;
+        }
+        .stat-label {
+            font-family: var(--font-code); font-size: 0.65rem;
+            color: var(--text-muted); letter-spacing: 2px; margin-top: 4px;
+        }
+
+        /* ── ACHIEVEMENTS ───────────────────────── */
+        #achievements { background: #080808; }
+
+        .ach-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .ach-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            padding: 1.5rem; position: relative; overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .ach-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 3px; height: 100%; background: var(--green);
+            transform: scaleY(0); transform-origin: top; transition: transform 0.3s;
+        }
+        .ach-card:hover { border-color: rgba(0,255,136,0.35); transform: translateY(-4px); }
+        .ach-card:hover::before { transform: scaleY(1); }
+
+        .ach-icon {
+            width: 44px; height: 44px;
+            background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.15);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1rem; font-size: 1.2rem;
+        }
+        .ach-title {
+            font-family: var(--font-display); font-size: 0.78rem;
+            font-weight: 700; letter-spacing: 1.5px; margin-bottom: 0.5rem; color: #fff;
+        }
+        .ach-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+        .ach-tag {
+            display: inline-block; font-family: var(--font-code); font-size: 0.62rem;
+            padding: 2px 8px; background: rgba(0,212,255,0.08);
+            color: var(--cyan); border: 1px solid rgba(0,212,255,0.15);
+            margin-top: 0.8rem; letter-spacing: 1px;
+        }
+
+        /* ── PROJECTS ───────────────────────────── */
+        #projects { background: var(--bg); }
+
+        .proj-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .proj-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            overflow: hidden; transition: all 0.3s; position: relative;
+        }
+        .proj-card:hover { border-color: rgba(0,255,136,0.35); transform: translateY(-4px); }
+
+        .proj-number {
+            font-family: var(--font-display); font-size: 4.5rem;
+            font-weight: 900; color: rgba(0,255,136,0.05);
+            position: absolute; top: -8px; right: 16px; line-height: 1;
+            pointer-events: none;
+        }
+
+        .proj-body { padding: 1.75rem; }
+        .proj-title {
+            font-family: var(--font-display); font-size: 0.82rem;
+            font-weight: 700; letter-spacing: 2px; margin-bottom: 0.75rem; color: #fff;
+        }
+        .proj-desc { font-size: 0.84rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+
+        .tech-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tech-tag {
+            font-family: var(--font-code); font-size: 0.62rem;
+            padding: 3px 10px; background: rgba(0,255,136,0.06);
+            color: var(--green); border: 1px solid rgba(0,255,136,0.18);
+            letter-spacing: 1px;
+        }
+
+        /* ── GALLERY ────────────────────────────── */
+        #gallery { background: #080808; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            position: relative; aspect-ratio: 4/3; overflow: hidden;
+            border: 1px solid var(--border); cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.4s; display: block;
+        }
+        .gallery-item:hover img { transform: scale(1.06); }
+
+        .gallery-overlay {
+            position: absolute; inset: 0;
+            background: rgba(0,255,136,0.08);
+            border: 1px solid var(--green);
+            opacity: 0; transition: opacity 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-overlay-text {
+            font-family: var(--font-code); font-size: 0.68rem;
+            color: var(--green); letter-spacing: 3px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.96);
+            z-index: 1000; display: none;
+            align-items: center; justify-content: center;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img {
+            max-width: 90vw; max-height: 85vh; object-fit: contain;
+            border: 1px solid var(--border);
+        }
+        .lightbox-close {
+            position: absolute; top: 24px; right: 24px;
+            background: none; border: 1px solid var(--border);
+            color: var(--green); cursor: pointer;
+            width: 42px; height: 42px;
+            font-family: var(--font-code); font-size: 1rem;
+        }
+        .lightbox-close:hover { border-color: var(--green); background: rgba(0,255,136,0.08); }
+
+        /* ── CONTACT ────────────────────────────── */
+        #contact { background: var(--bg); }
+
+        .contact-grid {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem;
+        }
+
+        .contact-info-head {
+            font-family: var(--font-display); font-size: 0.9rem;
+            letter-spacing: 2px; color: var(--green); margin-bottom: 1.75rem;
+        }
+
+        .contact-item {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 1rem; padding: 1rem;
+            background: var(--bg-card); border: 1px solid var(--border);
+            transition: border-color 0.2s;
+        }
+        .contact-item:hover { border-color: rgba(0,255,136,0.25); }
+
+        .contact-icon {
+            width: 40px; height: 40px;
+            background: rgba(0,255,136,0.08);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; font-size: 1rem;
+        }
+        .contact-label {
+            font-family: var(--font-code); font-size: 0.65rem;
+            color: var(--text-muted); letter-spacing: 1px; display: block;
+        }
+        .contact-value {
+            font-size: 0.88rem; color: #fff; text-decoration: none;
+        }
+        .contact-value:hover { color: var(--green); }
+
+        .contact-form {
+            background: var(--bg-card); border: 1px solid var(--border);
+        }
+        .form-header {
+            background: var(--bg-card2); padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .form-body { padding: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-label {
+            font-family: var(--font-code); font-size: 0.68rem;
+            color: var(--green); letter-spacing: 2px;
+            display: block; margin-bottom: 0.4rem;
+        }
+        .form-input, .form-textarea {
+            width: 100%; background: var(--bg);
+            border: 1px solid var(--border); color: var(--text);
+            font-family: var(--font-code); font-size: 0.83rem;
+            padding: 0.7rem 1rem; outline: none; transition: border-color 0.2s;
+        }
+        .form-input:focus, .form-textarea:focus { border-color: var(--green); }
+        .form-textarea { height: 110px; resize: vertical; }
+        .form-submit {
+            width: 100%; padding: 0.85rem; background: var(--green); color: #000;
+            border: none; font-family: var(--font-code); font-size: 0.83rem;
+            font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: background 0.2s;
+        }
+        .form-submit:hover { background: #fff; }
+
+        /* ── FOOTER ─────────────────────────────── */
+        footer {
+            background: #080808; border-top: 1px solid var(--border);
+            padding: 2rem 2.5rem; text-align: center;
+        }
+        .footer-text {
+            font-family: var(--font-code); font-size: 0.72rem;
+            color: var(--text-muted); letter-spacing: 1px;
+        }
+        .footer-text span { color: var(--green); }
+
+        /* ── ANIMATIONS ─────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .reveal {
+            opacity: 0; transform: translateY(28px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── RESPONSIVE ─────────────────────────── */
+        @media (max-width: 900px) {
+            .hero-content { grid-template-columns: 1fr; }
+            .hero-image-wrap { display: none; }
+            .about-grid { grid-template-columns: 1fr; }
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            nav { padding: 0 1.25rem; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            section { padding: 4.5rem 1.25rem; }
+            .hero-btns { flex-direction: column; }
+            .btn-primary, .btn-secondary { text-align: center; }
+        }
+
+        /* Mobile nav open state */
+        .nav-links.open {
+            display: flex; flex-direction: column;
+            position: fixed; top: 60px; left: 0; right: 0;
+            background: rgba(5,5,5,0.98); padding: 2rem;
+            border-bottom: 1px solid var(--border); z-index: 99;
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+
+<!-- ── NAVBAR ───────────────────────────────────── -->
+<nav>
+    <a href="#home" class="nav-logo">TK<span>.</span></a>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="#home">~/home</a></li>
+        <li><a href="#about">~/about</a></li>
+        <li><a href="#achievements">~/achievements</a></li>
+        <li><a href="#projects">~/projects</a></li>
+        <li><a href="#gallery">~/gallery</a></li>
+        <li><a href="#contact">~/contact</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────── -->
+<section id="home">
+    <div class="scanlines"></div>
+    <div class="hero-content">
+        <div>
+            <p class="hero-label">// STUDENT DEVELOPER</p>
+            <h1 class="hero-name">
+                <span class="glitch" data-text="TANMAY K">TANMAY K</span>
+            </h1>
+            <div class="hero-typing">
+                <span id="typed-text"></span><span class="cursor"></span>
+            </div>
+            <p class="hero-desc">
+                B.Tech CSE 1st Year at MIT Vishwaprayag University, Solapur.
+                Passionate about coding, fitness, and building things that actually matter.
+            </p>
+            <div class="hero-btns">
+                <a href="#projects" class="btn-primary">VIEW PROJECTS</a>
+                <a href="#contact" class="btn-secondary">CONTACT ME</a>
+            </div>
+        </div>
+        <div class="hero-image-wrap">
+            <img src="assets/images/profile.jpg" alt="Tanmay K" class="hero-img">
+            <div class="hero-img-border"></div>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                OPEN TO OPPORTUNITIES
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── ABOUT ─────────────────────────────────────── -->
+<section id="about">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">// 01 &mdash; ABOUT</span>
+            <h2 class="section-title">WHO AM I</h2>
+        </div>
+        <div class="about-grid">
+            <div class="terminal-card reveal">
+                <div class="terminal-header">
+                    <div class="dot dot-red"></div>
+                    <div class="dot dot-yellow"></div>
+                    <div class="dot dot-green"></div>
+                    <span class="terminal-title">about_tanmay.sh</span>
+                </div>
+                <div class="terminal-body">
+                    <div><span class="cmd">$</span> cat profile.json</div>
+                    <div class="output">
+                        <div><span class="key">"name"</span>: <span class="val">"Tanmay K"</span>,</div>
+                        <div><span class="key">"degree"</span>: <span class="val">"B.Tech CSE — 1st Year"</span>,</div>
+                        <div><span class="key">"college"</span>: <span class="val">"MIT Vishwaprayag University"</span>,</div>
+                        <div><span class="key">"location"</span>: <span class="val">"Solapur, Maharashtra"</span>,</div>
+                        <div><span class="key">"interests"</span>: <span class="val">["coding","fitness","AI"]</span></div>
+                    </div>
+                    <br>
+                    <div><span class="cmd">$</span> cat skills.txt</div>
+                    <div class="output">
+                        <div class="skills-grid">
+                            <div class="skill-item">HTML / CSS</div>
+                            <div class="skill-item">JavaScript</div>
+                            <div class="skill-item">C Language</div>
+                            <div class="skill-item">Python</div>
+                            <div class="skill-item">Git &amp; GitHub</div>
+                            <div class="skill-item">AI / ML Basics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="stats-grid reveal">
+                    <div class="stat-box">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">ACHIEVEMENTS</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">2+</span>
+                        <span class="stat-label">PROJECTS</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">1st</span>
+                        <span class="stat-label">B.TECH YEAR</span>
+                    </div>
+                </div>
+                <div class="terminal-card reveal" style="margin-top: 1.5rem;">
+                    <div class="terminal-header">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                        <span class="terminal-title">goals.sh</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div><span class="cmd">$</span> goals --list</div>
+                        <div class="output">
+                            <div>→ Master full-stack development</div>
+                            <div>→ Build impactful AI projects</div>
+                            <div>→ Contribute to open-source</div>
+                            <div>→ Land a top software engineering role</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── ACHIEVEMENTS ──────────────────────────────── -->
+<section id="achievements">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">// 02 &mdash; ACHIEVEMENTS</span>
+            <h2 class="section-title">WHAT I'VE DONE</h2>
+        </div>
+        <div class="ach-grid">
+            <div class="ach-card reveal">
+                <div class="ach-icon">🤖</div>
+                <div class="ach-title">AI4A PROJECT</div>
+                <div class="ach-desc">Explored practical AI applications in everyday and Indian societal contexts through the AI for All (AI4A) initiative.</div>
+                <span class="ach-tag">AI / MACHINE LEARNING</span>
+            </div>
+            <div class="ach-card reveal">
+                <div class="ach-icon">💡</div>
+                <div class="ach-title">DESIGN THINKING PROJECT</div>
+                <div class="ach-desc">Applied human-centered design methodology following the Stanford d.school framework to prototype solutions for real user problems.</div>
+                <span class="ach-tag">INNOVATION</span>
+            </div>
+            <div class="ach-card reveal">
+                <div class="ach-icon">⚗️</div>
+                <div class="ach-title">ACE PROJECT</div>
+                <div class="ach-desc">Researched chemical leaching prevention from solid waste dumps in Solapur, proposing green chemistry solutions using natural adsorbents.</div>
+                <span class="ach-tag">GREEN CHEMISTRY</span>
+            </div>
+            <div class="ach-card reveal">
+                <div class="ach-icon">📜</div>
+                <div class="ach-title">COURSERA CERTIFICATE</div>
+                <div class="ach-desc">Completed a professional certification on Coursera covering core computer science and software engineering fundamentals.</div>
+                <span class="ach-tag">CERTIFICATION</span>
+            </div>
+            <div class="ach-card reveal">
+                <div class="ach-icon">🌐</div>
+                <div class="ach-title">CISCO NETACAD</div>
+                <div class="ach-desc">Earned a Cisco Networking Academy certificate covering networking fundamentals, cybersecurity, and internet technologies.</div>
+                <span class="ach-tag">NETWORKING</span>
+            </div>
+            <div class="ach-card reveal">
+                <div class="ach-icon">🚀</div>
+                <div class="ach-title">YUVA AI CERTIFICATE</div>
+                <div class="ach-desc">Completed the Yuva AI program with hands-on exposure to AI tools and their applications in the Indian context.</div>
+                <span class="ach-tag">AI / INDIA</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── PROJECTS ──────────────────────────────────── -->
+<section id="projects">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">// 03 &mdash; PROJECTS</span>
+            <h2 class="section-title">WHAT I'VE BUILT</h2>
+        </div>
+        <div class="proj-grid">
+            <div class="proj-card reveal">
+                <div class="proj-number">01</div>
+                <div class="proj-body">
+                    <div class="proj-title">PORTFOLIO WEBSITE</div>
+                    <p class="proj-desc">Dark hacker-themed personal portfolio with matrix rain animation, glitch effects, smooth scroll, gallery lightbox and terminal-style UI. Deployed on GitHub Pages.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">JAVASCRIPT</span>
+                        <span class="tech-tag">GITHUB PAGES</span>
+                    </div>
+                </div>
+            </div>
+            <div class="proj-card reveal">
+                <div class="proj-number">02</div>
+                <div class="proj-body">
+                    <div class="proj-title">DIGITAL LOGIC CIRCUITS</div>
+                    <p class="proj-desc">Designed and implemented core digital logic circuits including combinational and sequential circuits, demonstrating fundamental computer architecture principles.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">DIGITAL LOGIC</span>
+                        <span class="tech-tag">COMPUTER ARCH.</span>
+                        <span class="tech-tag">CIRCUIT DESIGN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── GALLERY ───────────────────────────────────── -->
+<section id="gallery">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">// 04 &mdash; GALLERY</span>
+            <h2 class="section-title">CERTIFICATES</h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item reveal" onclick="openLightbox('assets/certificates/cert1.jpg')">
+                <img src="assets/certificates/cert1.jpg" alt="Certificate 1" loading="lazy">
+                <div class="gallery-overlay"><span class="gallery-overlay-text">VIEW</span></div>
+            </div>
+            <div class="gallery-item reveal" onclick="openLightbox('assets/certificates/cert2.jpg')">
+                <img src="assets/certificates/cert2.jpg" alt="Certificate 2" loading="lazy">
+                <div class="gallery-overlay"><span class="gallery-overlay-text">VIEW</span></div>
+            </div>
+            <div class="gallery-item reveal" onclick="openLightbox('assets/certificates/cert3.jpg')">
+                <img src="assets/certificates/cert3.jpg" alt="Certificate 3" loading="lazy">
+                <div class="gallery-overlay"><span class="gallery-overlay-text">VIEW</span></div>
+            </div>
+            <div class="gallery-item reveal" onclick="openLightbox('assets/certificates/cert4.jpg')">
+                <img src="assets/certificates/cert4.jpg" alt="Certificate 4" loading="lazy">
+                <div class="gallery-overlay"><span class="gallery-overlay-text">VIEW</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── CONTACT ───────────────────────────────────── -->
+<section id="contact">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-label">// 05 &mdash; CONTACT</span>
+            <h2 class="section-title">GET IN TOUCH</h2>
+        </div>
+        <div class="contact-grid">
+            <div class="reveal">
+                <p class="contact-info-head">// REACH OUT</p>
+                <div class="contact-item">
+                    <div class="contact-icon">✉</div>
+                    <div>
+                        <span class="contact-label">EMAIL</span>
+                        <a href="mailto:26tanmay.k@gmail.com" class="contact-value">26tanmay.k@gmail.com</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <div>
+                        <span class="contact-label">PHONE</span>
+                        <a href="tel:+917820915001" class="contact-value">+91 78209 15001</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">⌥</div>
+                    <div>
+                        <span class="contact-label">GITHUB</span>
+                        <a href="https://github.com/tanmayk007" target="_blank" class="contact-value">github.com/tanmayk007</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <span class="contact-label">LOCATION</span>
+                        <span class="contact-value">Solapur, Maharashtra, India</span>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form reveal">
+                <div class="form-header">
+                    <div class="dot dot-red"></div>
+                    <div class="dot dot-yellow"></div>
+                    <div class="dot dot-green"></div>
+                    <span class="terminal-title">new_message.sh</span>
+                </div>
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="form-label">// YOUR_NAME</label>
+                        <input type="text" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">// YOUR_EMAIL</label>
+                        <input type="email" class="form-input" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">// MESSAGE</label>
+                        <textarea class="form-textarea" placeholder="Type your message..."></textarea>
+                    </div>
+                    <button class="form-submit">SEND_MESSAGE →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────── -->
+<footer>
+    <p class="footer-text">
+        Designed &amp; built by <span>Tanmay K</span> &mdash; MIT Vishwaprayag University &copy; 2025
+    </p>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+    <img id="lightbox-img" src="" alt="Certificate">
+</div>
+
+<script>
+// ── Matrix Rain ──────────────────────────────────
+(function () {
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&<>/\\|{}[];:01';
+    let cols, drops;
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        cols = Math.floor(canvas.width / 14);
+        drops = new Array(cols).fill(1);
+    }
+
+    function draw() {
+        ctx.fillStyle = 'rgba(5,5,5,0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#00ff88';
+        ctx.font = '13px JetBrains Mono, monospace';
+        for (let i = 0; i < drops.length; i++) {
+            ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 14, drops[i] * 14);
+            if (drops[i] * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+
+    init();
+    setInterval(draw, 50);
+    window.addEventListener('resize', init);
+})();
+
+// ── Typing Effect ────────────────────────────────
+(function () {
+    const phrases = [
+        'B.Tech CSE Student',
+        'Web Developer',
+        'Problem Solver',
+        'AI Enthusiast',
+        'Fitness Devotee'
+    ];
+    let i = 0, j = 0, deleting = false;
+    const el = document.getElementById('typed-text');
+
+    function type() {
+        const cur = phrases[i % phrases.length];
+        el.textContent = deleting ? cur.slice(0, --j) : cur.slice(0, ++j);
+        if (!deleting && j === cur.length) {
+            deleting = true; setTimeout(type, 1800); return;
+        }
+        if (deleting && j === 0) { deleting = false; i++; }
+        setTimeout(type, deleting ? 55 : 95);
+    }
+    setTimeout(type, 1400);
+})();
+
+// ── Scroll Reveal ────────────────────────────────
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((entry, idx) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('visible'), idx * 70);
+            revealObs.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+revealEls.forEach(el => revealObs.observe(el));
+
+// ── Nav Active Highlight ─────────────────────────
+const sections = document.querySelectorAll('section');
+const navAs    = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+    navAs.forEach(a => {
+        const active = a.getAttribute('href') === '#' + cur;
+        a.style.color = active ? 'var(--green)' : '';
+    });
+});
+
+// ── Mobile Nav ───────────────────────────────────
+function toggleNav() {
+    document.getElementById('nav-links').classList.toggle('open');
+}
+
+// ── Lightbox ─────────────────────────────────────
+function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>
