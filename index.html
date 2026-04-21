@@ -8,15 +8,26 @@
 
 <body>
 
-<button onclick="toggleMode()">🌙 Dark Mode</button>
+<nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#achievements">Achievements</a>
+    <a href="#projects">Projects</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#contact">Contact</a>
+</nav>
 
-<section>
+<button onclick="toggleMode()" style="position:fixed; right:20px; top:20px;">
+🌙
+</button>
+
+<section id="home">
     <h1>Tanmay Khandelwal</h1>
-    <img src="assets/images/profile.jpg" width="150">
-    <p>I am a student interested in technology and engineering.</p>
+    <img src="assets/images/profile.jpg" class="profile">
+    <p>Aspiring Engineer | Tech Enthusiast | Problem Solver</p>
 </section>
 
-<section>
+<section id="about">
     <h2>About Me</h2>
     <p>
         I am a B.Tech 1st year student with a strong interest in coding, fitness, 
@@ -25,7 +36,7 @@
     </p>
 </section>
 
-<section>
+<section id="achievements">
     <h2>Achievements</h2>
     <ul class="list">
         <li>AI4A Project – Introduction to Artificial Intelligence</li>
@@ -37,7 +48,7 @@
     </ul>
 </section>
 
-<section>
+<section id="projects">
     <h2>Projects</h2>
     <ul class="list">
         <li>Portfolio Website – Personal portfolio using HTML, CSS, JS</li>
@@ -45,34 +56,22 @@
     </ul>
 </section>
 
-<section>
+<section id="gallery" class="gallery">
     <h2>Gallery</h2>
-
-<img src="assets/certificates/cert1.jpg" width="200">
-<img src="assets/certificates/cert2.jpg" width="200">
-<img src="assets/certificates/cert3.jpg" width="200">
-<img src="assets/certificates/cert4.jpg" width="200">
+    <img src="assets/certificates/cert1.jpg">
+    <img src="assets/certificates/cert2.jpg">
+    <img src="assets/certificates/cert3.jpg">
+    <img src="assets/certificates/cert4.jpg">
 </section>
 
-<section>
+<section id="contact">
     <h2>Contact</h2>
-<p>Email: 26tanmay.k@gmail.com</p>
-<p>Phone: 7820915001 </p>
-<p>GitHub: https://github.com/tanmayk007</p>
-
+    <p>Email: 26tanmay.k@gmail.com</p>
+    <p>Phone: 7820915001</p>
+    <p>GitHub: https://github.com/tanmayk007</p>
 </section>
 
 <script src="script.js"></script>
 
 </body>
 </html>
-.list {
-    text-align: left;
-    max-width: 500px;
-    margin: auto;
-}
-
-.list li {
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-}
